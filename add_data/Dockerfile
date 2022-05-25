@@ -8,15 +8,13 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 
 
-
-
 RUN pip3 install -r requirements.txt
 
-COPY "data_file_nft.csv" .
-COPY "add_data.py" .
+COPY data_file_nft.csv data_file_nft.csv
+COPY  add_data.py add_data.py
 
 #COPY . .
-CMD ["python3","add_data.py"]
+CMD ["python","add_data.py"]
 #CMD ["python3"]
 
 

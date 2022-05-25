@@ -1,15 +1,7 @@
 version: '3.8'
 
 services:
-  python-cont:
-    build: ./add_data
-    container_name: pycont
-    depends_on:
-      db_postgres:
-       condition: service_healthy
-    command: echo "python - cont started"
       
-
   db_postgres:
     image: postgres:12.7
     container_name: ps_12_7
@@ -32,15 +24,28 @@ services:
       timeout: 5s
       retries: 5
 
-
-  python-query:
-    build: ./query_data
-    container_name: pyquery
+  python-cont:
+    build: ./add_data
+    container_name: pycont
+    volumes:
+      - ./add_data:/app
     depends_on:
       db_postgres:
-        condition: service_healthy
-      python-cont:
-        condition: service_started
+       condition: service_healthy
+    command: echo "python - cont started"
+
+
+#  python-query:
+#    build: ./query_data
+#    container_name: pyquery
+#    volumes:
+#      - ./query_data:/app_query
+#    depends_on:
+#      db_postgres:
+#        condition: service_healthy
+#      python-cont:
+#        condition: service_completed_successfully
+#    command: echo "python - query started"
 
 
 
