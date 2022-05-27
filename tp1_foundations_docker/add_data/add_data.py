@@ -34,6 +34,7 @@ except Exception as e:
 logger.info("read csv file")
 try:
     df = pd.read_csv("data_file_nft.csv")
+    logger.info("data successfully uploaded")
 except Exception as er:
     logger.error("error while reading file")
     logger.error(f"error message: {e}")
@@ -49,7 +50,7 @@ except Exception as e:
     logger.error("Error while df_toSQL")
     logger.error(f"Error message: {e}")
 
-logger.info("data successfully uploaded")
+
 # Close Connection
 engine.dispose()
 
