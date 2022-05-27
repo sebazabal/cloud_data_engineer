@@ -30,7 +30,8 @@ services:
     volumes:
       - ./add_data:/app
     depends_on:
-      - db_postgres:"condition: service_healthy"
+      db_postgres:
+        condition: service_healthy
  #   command: echo "python - cont started"
  # si le clavas el command de arriba, te pisa el CMD del Dockerfile y nunca corre el script
 
@@ -40,8 +41,10 @@ services:
     volumes:
       - ./query_data:/app_query
     depends_on:
-      - db_postgres:"condition: service_healthy"
-      - python-cont:"condition: service_completed_successfully"
+      db_postgres:
+        condition: service_healthy
+      python-cont:
+        condition: service_completed_successfully
     #command: tail -f /dev/null
 
 
