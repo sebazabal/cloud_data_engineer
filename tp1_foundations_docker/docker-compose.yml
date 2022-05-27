@@ -35,16 +35,16 @@ services:
     command: ["python","-u","/app/add_data.py"]
 
 
-#  python-query:
-#    build: ./query_data
-#    container_name: pyquery
-#    volumes:
-#      - ./query_data:/app_query
-#    depends_on:
-#      - db_postgres
-#      - python-cont
-#    command: ["python","-u","/app_query/query.py"]
-    #command: tail -f /dev/null
+  python-query:
+    build: ./query_data
+    container_name: pyquery
+    volumes:
+      - ./query_data:/app_query
+    depends_on:
+      - db_postgres
+      - python-cont
+    entrypoint: ["/app_query/entry.sh"]
+    command: ["python","-u","/app_query/query.py"]
 
 
 

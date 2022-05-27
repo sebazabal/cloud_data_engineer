@@ -2,24 +2,21 @@
 
 
 set -e
+
+echo "docker stop all running containers"
 docker stop $(docker ps -a -q)
 
+echo "docker rm all containers"
 docker rm $(docker ps -a -q)
 
+echo "docker remove all images"
 docker rmi $(docker images -q)
 
+
+echo "docker compose down, removing network"
 docker-compose down -v
 
+echo "docker compose up --build"
 docker-compose up --build
 
-#echo "ejecuta wait-until"
-#source .env
-#./wait-until "docker-compose exec -T -e PGPASSWORD=${POSTGRES_PASSWORD} db_postgres psql -U ${POSTGRES_USER} ${POSTGRES_DB} -c 'select 1'"
-#./wait-until "pg_isready -U postgres"
 
-#echo "termina el wait-until"
-
-#./wait-until "docker-compose exec pycont /app/add_data.py"
-#exec "$@"
-#docker-compose exec pycont python 
-#echo "pycont"
