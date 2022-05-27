@@ -1,76 +1,41 @@
 # Trabajo Práctico Final Foundations
-### ITBA - Cloud Data Engineering
+### ITBA - Cloud Data Engineering - Zabaljauregui Sebastian
 
-Bienvenido al TP Final de la sección Foundations del Módulo 1 de la Diplomatura en Cloud Data Engineering del ITBA.
+The following task was resolved using ***one docker-compose file*** as expected with three different services:
+1. A Postgres database (version 12.7) where we execute an init bash script to create the database as well as the table to be populated with service #2. This init bash script also grant access to the user declared in the docker-compose file.yml
+2. The second service is the first python service called: `py-cont` (python content). This service is in charge of adding the corresponding data to the database. The dataset was taken from the official Kaggle site: [Kaggle - NFT History Sales](https://www.kaggle.com/datasets/mathurinache/nft-history-sales).
+3. The third and last service is another python container, called `py-query`, and is responsible for creating a report file with the five business questions required. 
 
-En este trabajo práctico vas a poner en práctica los conocimientos adquiridos en: 
+Both python services has their own logs file, where we can check every task/log of every step that's been execute.
 
-1. Bases de Datos Relacionales (PostgreSQL específicamente).
-2. BASH y Linux Commandline.
-3. Python 3.7+.
-4. Docker.
+There are three different folders in the github repository:
+1. The first one called `db_psql12`, coming from database postgres version 12.7, in where we have the init bash script
+2. The second folder called `add_data`, is where we have the files corresponding for the first python service, responsible for adding the data to the database. We can find the Dockerfile, the dataset as a '.csv' file and the requirements.txt with the required libraries to successfully run the python script.
+3. The third and last folder is called `query_data`. We can find everything we need to run the second python service, responsible of creating the report file answering the five business questions.
 
-Para realizar este TP vamos a utlizar la plataforma Github Classrooms donde cada alumno tendrá acceso a un repositorio de Git privado hosteado en la plataforma Github.
+### How can I run the repo?
 
-En cada repositorio, en la sección de [Issues](https://guides.github.com/features/issues/) (tab a la derecha de Code en las tabs de navegación en la parte superior de la pantalla) podrás ver que hay creado un issue por cada ejercicio. 
-El objetivo es resolver ejercicio/issue creando un branch y un pull request asociado. 
+In order to successfully run the docker-compose, a start bash script was created. So, after cloning the repo, you will need to have bash installed in your local machine, as well as *Docker version 20.10.14, build a224086* and *docker-compose version 1.29.2*. 
+You can check both versions running the following commands:
 
-Debido a que cada ejercico utiliza el avance realizado en el issue anterior, cada nuevo branch debe partir del branch del ejercicio anterior.
-
-Para poder realizar llevar a cabo esto puede realizarlo desde la web de Github pero recomendamos hacerlo con la aplicación de línea de comando de git o con la aplicación de [Github Desktop](https://desktop.github.com/) (interfaz visual) o [Github CLI](https://cli.github.com/) (interfaz de línea de comando).
-
-La idea de utilizar Github es replicar el ambiente de un proyecto real donde las tareas se deberían definir como issues y cada nuevo feature se debería crear con un Pull Request correspondiente que lo resuelve. 
-https://guides.github.com/introduction/flow/
-https://docs.github.com/en/github/getting-started-with-github/quickstart/github-flow
-
-**MUY IMPORTANTE: parte importante del Trabajo Práctico es aprender a buscar en Google para poder resolver de manera exitosa el trabajo práctico**
-
-## Ejercicios
-
-### Ejercicio 1: Elección de dataset y preguntas
-
-Elegir un dataset de la [wiki de PostgreSQL ](https://wiki.postgresql.org/wiki/Sample_Databases) u otra fuente que sea de interés para el alumno.
-
-Crear un Pull Request con un archivo en [formato markdown](https://guides.github.com/features/mastering-markdown/) expliando el dataset elegido y  una breve descripción de al menos 4 preguntas de negocio que se podrían responder teniendo esos datos en una base de datos relacional de manera que sean consultables con lenguaje SQL.
+```
+docker --version
+docker-compose version
+```
 
 
-Otras fuentes de datos abiertos sugeridas:
-https://catalog.data.gov/dataset
-https://datasetsearch.research.google.com/
-https://www.kaggle.com/datasets
+After chequing the pre-requisists, we can run the bash `start.sh` script by doing the following:
 
-## Ejercicio 2: Crear container de la DB
+```
+bash start.sh
+```
 
-Crear un archivo de [docker-compose](https://docs.docker.com/compose/gettingstarted/) que cree un container de [Docker](https://docs.docker.com/get-started/) con una base de datos PostgreSQL con la versión 12.7.
-Recomendamos usar la [imagen oficial de PostgreSQL](https://hub.docker.com/_/postgres) disponible en Docker Hub.
- 
-Se debe exponer el puerto estándar de esa base de datos para que pueda recibir conexiones desde la máquina donde se levante el container.
+# Important callout:
+
+***The bash script will check if you have any docker container running, stop all docker containers, remove all images from your local machine, remove any network previously created and run the `docker-compose up --build` command.***
 
 
-## Ejercicio 3: Script para creación de tablas
-
-Crear un script de bash que ejecute uno o varios scripts SQL que creen las tablas de la base de datos en la base PostgreSQL creada en el container del ejercicio anterior.
-
-Se deben solamente crear las tablas, primary keys, foreign keys y otras operaciones de [DDL](https://en.wikipedia.org/wiki/Data_definition_language) sin crear o insertar los datos. 
-
-## Ejercicio 4: Popular la base de datos
-
-Crear un script de Python que una vez que el container se encuentre funcionando y se hayan ejecutado todas las operaciones de DDL necesarias, popule la base de datos con el dataset elegido.
-
-La base de datos debe quedar lista para recibir consultas. Durante la carga de información puede momentareamente remover cualquier constraint que no le permita insertar la información pero luego debe volverla a crear.
-
-Este script debe ejecutarse dentro de un nuevo container de Docker mediante el comando `docker run`.
-
-El container de Docker generado para no debe contener los datos crudos que se utilizarían para cargar la base.
-Para pasar los archivos con los datos, se puede montar un volumen (argumento `-v` de `docker run`) o bien bajarlos directamente desde Internet usando alguna librería de Python (como `requests`).
 
 
-## Ejercicio 5: Consultas a la base de datos
 
-Escribir un script de Python que realice al menos 5 consultas SQL que puedan agregar valor al negocio y muestre por pantalla un reporte con los resultados.
 
-Este script de reporting debe correrse mediante una imagen de Docker con `docker run` del mismo modo que el script del ejercicio 4.
-
-## Ejercicio 6: Documentación y ejecución end2end
-
-Agregue una sección al README.md comentando como resolvió los ejercicios, linkeando al archivo con la descripción del dataset y explicando como ejecutar un script de BASH para ejecutar todo el proceso end2end desde la creación del container, operaciones de DDL, carga de datos y consultas. Para esto crear el archivo de BASH correspondiente. 
