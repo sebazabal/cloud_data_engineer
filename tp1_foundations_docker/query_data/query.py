@@ -3,7 +3,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import logging 
 import contextlib
-
+from datetime import datetime
 #Seteo Logger
 logger = logging.getLogger('Log_query_data')
 logger.setLevel(logging.DEBUG)
@@ -32,8 +32,8 @@ except Exception as e:
 
 
 
-
-file_path = 'report.txt'
+date_now = datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")
+file_path = f'report_{date_now}.txt'
 
 try:
     with open(file_path, "w+") as o:
